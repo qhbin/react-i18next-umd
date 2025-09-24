@@ -9,7 +9,7 @@ import livereload from 'rollup-plugin-livereload';
 const isProduction = process.env.NODE_ENV === 'production';
 
 export default {
-  input: './node_modules/react-i18next/dist/umd/react-i18next.js',
+  input: './node_modules/react-i18next/dist/es/index.js',
   output: {
     file: 'dist/react-i18next.umd.js',
     format: 'umd',
