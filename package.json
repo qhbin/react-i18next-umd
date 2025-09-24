@@ -1,0 +1,35 @@
+{
+  "name": "react-i18next-umd",
+  "version": "1.0.0",
+  "description": "react-i18next umd library",
+  "main": "dist/react-i18next.umd.js",
+  "type": "module",
+  "scripts": {
+    "dev": "NODE_ENV=development rollup -c -w",
+    "build": "NODE_ENV=production rollup -c"
+  },
+  "author": "qhbin",
+  "license": "MIT",
+  "keywords": [
+    "react-i18next",
+    "react",
+    "umd"
+  ],
+  "dependencies": {
+    "react-i18next": "13.5.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.28.4",
+    "@babel/plugin-transform-runtime": "^7.28.3",
+    "@babel/runtime": "^7.28.4",
+    "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-commonjs": "^28.0.6",
+    "@rollup/plugin-node-resolve": "^16.0.1",
+    "@rollup/plugin-replace": "^6.0.2",
+    "@rollup/plugin-terser": "^0.4.4",
+    "babel-preset-react-app": "^10.1.0",
+    "rollup": "^4.52.0",
+    "rollup-plugin-livereload": "^2.0.5",
+    "rollup-plugin-serve": "^3.0.0"
+  }
+}

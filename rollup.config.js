@@ -1,0 +1,57 @@
+import resolve from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
+import terser from '@rollup/plugin-terser'; // 更新导入
+import babel from '@rollup/plugin-babel';
+import replace from '@rollup/plugin-replace';
+import serve from 'rollup-plugin-serve';
+import livereload from 'rollup-plugin-livereload';
+
+const isProduction = process.env.NODE_ENV === 'production';
+
+export default {
+  input: './node_modules/react-i18next/dist/umd/react-i18next.js',
+  output: {
+    file: 'dist/react-i18next.umd.js',
+    format: 'umd',
+    name: 'ReactI18next',
+    globals: {
+      react: 'React',
+      'react-dom': 'ReactDOM',
+    },
+    sourcemap: true,
+    exports: 'auto'
+  },
+  external: [
+    'react',
+    'react-dom',
+  ],
+  plugins: [
+    replace({
+      'process.env.NODE_ENV': JSON.stringify('production'),
+      'process.env': '{}',
+      preventAssignment: true
+    }),
+    resolve({
+      browser: true
+    }),
+    commonjs(),
+    babel({
+      babelHelpers: 'runtime',
+      presets: [
+        ['react-app', { targets: { browsers: ['> 0.5% in CN', 'last 2 versions'] } }]
+      ]
+    }),
+    // 只在开发模式下启用 serve 和 livereload
+    !isProduction && serve({
+      port: 3000,
+      contentBase: ['dist', '.'],
+      open: true,
+      openPage: '/index.html'
+    }),
+    !isProduction && livereload({
+      watch: ['dist', 'index.html'],
+      verbose: false
+    }),
+    isProduction && terser() // 使用新的 terser 插件
+  ]
+};
