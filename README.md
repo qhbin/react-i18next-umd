@@ -1,10 +1,10 @@
-# React Router DOM UMD Bundle
+# React I18next UMD Bundle
 
-这是一个将 [react-router-dom](file:///Users/qiuhuibin/projects/react-router-dom-umd/node_modules/react-router-dom) 打包成 UMD 格式的项目，方便在浏览器中通过 `<script>` 标签直接使用。
+这是一个将 [react-i18next](https://react.i18next.com/) 打包成 UMD 格式的项目，方便在浏览器中通过 `<script>` 标签直接使用。
 
 ## 项目介绍
 
-本项目使用 Rollup 将 [react-router-dom](file:///Users/qiuhuibin/projects/react-router-dom-umd/node_modules/react-router-dom) 及其依赖打包成一个单独的 UMD 文件，可以在不使用 npm 或模块打包工具的情况下直接在浏览器中使用。
+本项目使用 Rollup 将 [react-i18next](https://react.i18next.com/) 及其依赖打包成一个单独的 UMD 文件，可以在不使用 npm 或模块打包工具的情况下直接在浏览器中使用。
 
 ## 安装依赖
 
@@ -30,7 +30,7 @@ npm run dev
 npm run build
 ```
 
-构建后的文件将输出到 [dist/react-router-dom.umd.js](file:///Users/qiuhuibin/projects/react-router-dom-umd/dist/react-router-dom.umd.js)。
+构建后的文件将输出到 `dist/react-i18next.umd.js`。
 
 ## 使用方法
 
@@ -38,48 +38,87 @@ npm run build
 
 ```html
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>React Router DOM UMD Example</title>
-</head>
-<body>
-    <div id="root"></div>
-    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React I18next UMD Example</title>
     <!-- 引入 React 和 ReactDOM -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    
-    <!-- 引入打包好的 React Router DOM -->
-    <script src="dist/react-router-dom.umd.js"></script>
-    
-    <!-- 使用 -->
+    <!-- 引入打包好的 React I18next -->
+    <script src="dist/react-i18next.umd.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
     <script>
-        const { BrowserRouter, Routes, Route, Link } = ReactRouterDom;
+        // 从全局变量中获取 react-i18next 的组件和函数
+        const { I18nextProvider, useTranslation } = ReactI18next;
         
-        function App() {
+        // 创建 i18next 实例
+        const i18nextInstance = i18next.createInstance();
+        
+        // 初始化 i18next
+        i18nextInstance.init({
+            lng: 'en',
+            resources: {
+                en: {
+                    translation: {
+                        hello: 'Hello',
+                        welcome: 'Welcome to React I18next UMD'
+                    }
+                },
+                zh: {
+                    translation: {
+                        hello: '你好',
+                        welcome: '欢迎使用 React I18next UMD'
+                    }
+                }
+            }
+        });
+        
+        // 示例组件
+        function Welcome() {
+            const { t, i18n } = useTranslation();
+            
+            const changeLanguage = (lng) => {
+                i18n.changeLanguage(lng);
+            };
+            
             return React.createElement(
-                BrowserRouter,
-                null,
+                'div',
+                { style: { textAlign: 'center', marginTop: '50px' } },
+                React.createElement('h1', null, t('hello')),
+                React.createElement('p', null, t('welcome')),
                 React.createElement(
-                    "div",
+                    'div',
                     null,
                     React.createElement(
-                        "nav",
-                        null,
-                        React.createElement(Link, { to: "/" }, "Home"),
-                        " | ",
-                        React.createElement(Link, { to: "/about" }, "About")
+                        'button',
+                        { onClick: () => changeLanguage('en') },
+                        'English'
                     ),
+                    ' ',
                     React.createElement(
-                        Routes,
-                        null,
-                        React.createElement(Route, { path: "/", element: React.createElement("h1", null, "Home Page") }),
-                        React.createElement(Route, { path: "/about", element: React.createElement("h1", null, "About Page") })
+                        'button',
+                        { onClick: () => changeLanguage('zh') },
+                        '中文'
                     )
                 )
             );
         }
         
+        // 应用组件
+        function App() {
+            return React.createElement(
+                I18nextProvider,
+                { i18n: i18nextInstance },
+                React.createElement(Welcome)
+            );
+        }
+        
+        // 渲染应用
         ReactDOM.render(React.createElement(App), document.getElementById('root'));
     </script>
 </body>
